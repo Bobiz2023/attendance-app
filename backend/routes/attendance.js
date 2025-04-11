@@ -1,29 +1,17 @@
 const express = require('express');
-const Attendance = require('../models/attendance');
+const { getAllAttendance, recordAttendance, updateAttendance, deleteAttendance } = require('../controllers/attendanceController');
 const router = express.Router();
 
-// Get All Attendance
-router.get('/', async (req, res) => {
-  try {
-    const attendance = await Attendance.find();
-    res.json(attendance);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// Get all attendance records
+router.get('/', getAllAttendance);
 
-// Record Attendance
-router.post('/', async (req, res) => {
-  const { studentName, status } = req.body;
-  const newAttendance = new Attendance({ studentName, status });
+// Record attendance for a student
+router.post('/', recordAttendance);
 
-  try {
-    const savedAttendance = await newAttendance.save();
-    res.json(savedAttendance);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// Update an attendance record (Optional)
+router.put('/:id', updateAttendance);
+
+// Delete an attendance record (Optional)
+router.delete('/:id', deleteAttendance);
 
 module.exports = router;
-

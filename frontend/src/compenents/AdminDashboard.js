@@ -1,26 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import './styles.css';
 
 function AdminDashboard() {
   const [attendance, setAttendance] = useState([]);
 
   useEffect(() => {
-    async function fetchAttendance() {
-      const res = await axios.get('http://localhost:5000/api/attendance');
-      setAttendance(res.data);
-    }
-    fetchAttendance();
+    fetch('/api/attendance')
+      .then((res) => res.json())
+      .then((data) => setAttendance(data));
   }, []);
 
   return (
     <div className="dashboard">
-      <h1>Admin Dashboard</h1>
+      <div className="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <div className="user-info">
+          <span>Welcome, Admin!</span>
+        </div>
+      </div>
       <table>
         <thead>
           <tr>
             <th>Student Name</th>
             <th>Status</th>
             <th>Date</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -29,6 +33,7 @@ function AdminDashboard() {
               <td>{record.studentName}</td>
               <td>{record.status}</td>
               <td>{new Date(record.date).toLocaleDateString()}</td>
+              <td><button>Mark Present</button></td>
             </tr>
           ))}
         </tbody>
@@ -38,4 +43,3 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
-

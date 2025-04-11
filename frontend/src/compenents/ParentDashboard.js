@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import './styles.css';
 
 function ParentDashboard() {
   const [attendance, setAttendance] = useState([]);
 
   useEffect(() => {
-    async function fetchAttendance() {
-      const res = await axios.get('http://localhost:5000/api/attendance');
-      setAttendance(res.data);
-    }
-    fetchAttendance();
+    fetch('/api/attendance')
+      .then((res) => res.json())
+      .then((data) => setAttendance(data));
   }, []);
 
   return (
@@ -38,4 +36,3 @@ function ParentDashboard() {
 }
 
 export default ParentDashboard;
-

@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const Attendance = require('./models/attendance');
 
 const app = express();
 
@@ -8,22 +9,15 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MongoDB connection (make sure to update with your database URI)
+// MongoDB connection
 mongoose.connect('mongodb://localhost/attendance-tracker', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
-// Mongoose Schema
-const attendanceSchema = new mongoose.Schema({
-  studentName: String,
-  status: String,  // Present or Absent
-  date: Date,
-});
-
-const Attendance = mongoose.model('Attendance', attendanceSchema);
-
 // Routes
+
+// Get all attendance records
 app.get('/api/attendance', async (req, res) => {
   try {
     const records = await Attendance.find();
@@ -33,6 +27,7 @@ app.get('/api/attendance', async (req, res) => {
   }
 });
 
+// Add attendance record
 app.post('/api/attendance', async (req, res) => {
   const { studentName, status, date } = req.body;
   const attendance = new Attendance({
